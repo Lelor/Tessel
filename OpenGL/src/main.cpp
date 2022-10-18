@@ -12,7 +12,11 @@
 #include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "Texture.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
+#define PI 3.141592653f
 
 int main()
 {
@@ -61,8 +65,6 @@ int main()
     VertexBufferLayout layout;
     layout.Push<float>(2);
     layout.Push<float>(2);
-    // GLCall(glEnableVertexAttribArray(1));
-    // GLCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (const void*)8));
     va.AddBuffer(vb, layout);
     IndexBuffer ib(indexBuffer, 6);
 
@@ -70,7 +72,6 @@ int main()
     Texture texture("res/textures/sample.png");
     texture.Bind(0);
     shader.Bind();
-    shader.SetUniform1i("texture", 0);
 
     va.Unbind();
     shader.Unbind();
@@ -81,7 +82,11 @@ int main()
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        glm::mat4 trans = glm::mat4(1.0f);
+        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
         /* Render here */
+        shader.SetUniformMatrix4fv("u_transform", glm::value_ptr(trans));
         renderer.Clear();
         renderer.Draw(va, ib, shader);
 

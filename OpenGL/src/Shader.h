@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <GL/glew.h>
 
 
 struct ShaderProgramSource {
@@ -24,6 +25,7 @@ public:
 	void Unbind() const;
 
 	// Set uniforms
+	void SetUniformMatrix4fv(const std::string& name, const GLfloat* value);
 	void SetUniform1i(const std::string& name, int value);
 	void SetUniform4f(const std::string& name, float f1, float f0, float f2, float f3);
 
